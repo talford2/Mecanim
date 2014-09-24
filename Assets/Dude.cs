@@ -24,7 +24,7 @@ public class Dude : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         moving = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
@@ -43,7 +43,8 @@ public class Dude : MonoBehaviour
 
         var velocity = Vector3.ClampMagnitude(new Vector3(moving.x, 0f, moving.y), 1f)*WalkSpeed;
 
-        playerController.Move(velocity * Time.deltaTime);
+        if (moving.magnitude > 0.1f)
+            playerController.Move(velocity*Time.deltaTime);
 
         ChaseCamera.transform.position = transform.position + new Vector3(0, 7.5f, -7.5f);
         ChaseCamera.transform.LookAt(transform.position);
