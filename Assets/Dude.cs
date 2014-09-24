@@ -31,6 +31,9 @@ public class Dude : MonoBehaviour
         if (Math.Abs(Input.GetAxis("Horizontal")) > 0.1f || Math.Abs(Input.GetAxis("Vertical")) > 0.1f)
             facing = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
+        if (Input.GetButton("Fire1"))
+            animatorThing.SetBool("Firing", true);
+
         animatorThing.SetFloat("Speed", Vector3.ClampMagnitude(moving, 1f).magnitude);
 
         var targetYaw = Mathf.Atan2(facing.x, facing.y)*Mathf.Rad2Deg;
