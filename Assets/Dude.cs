@@ -6,14 +6,18 @@ public class Dude : MonoBehaviour
 {
     Animator animatorThing;
     public Camera ChaseCamera;
+    public float WalkSpeed;
 
     private Vector2 moving;
     private Vector2 facing;
     private float turnSpeed;
 
+    private CharacterController playerController;
+
     // Use this for initialization
     void Start()
     {
+        playerController = GetComponent<CharacterController>();
         animatorThing = GetComponent<Animator>();
         moving = new Vector2(0, 1f);
         turnSpeed = 5f;
@@ -38,6 +42,9 @@ public class Dude : MonoBehaviour
         var relativeAimYaw = aimYaw - transform.eulerAngles.y;
 
         Debug.Log(transform.eulerAngles.y + " | " + relativeAimYaw);
+
+
+        playerController.Move(Vector3.ClampMagnitude(new Vector3(moving.x, 0f, moving.y), 1f)*WalkSpeed*Time.deltaTime);
 
         ChaseCamera.transform.position = transform.position + new Vector3(0, 7.5f, -7.5f);
         ChaseCamera.transform.LookAt(transform.position);
