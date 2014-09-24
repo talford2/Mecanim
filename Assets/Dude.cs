@@ -4,6 +4,7 @@ using System.Collections;
 public class Dude : MonoBehaviour
 {
     Animator animatorThing;
+    public Camera ChaseCamera;
 
     // Use this for initialization
     void Start()
@@ -24,5 +25,8 @@ public class Dude : MonoBehaviour
         //if (Input.GetAxis("Vertical") < 0)
         //{
         //}
+
+        ChaseCamera.transform.position = transform.position + new Vector3(0, 7.5f, -7.5f);
+        ChaseCamera.transform.LookAt(transform.position);
     }
 }
