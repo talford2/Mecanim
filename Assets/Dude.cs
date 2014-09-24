@@ -31,7 +31,7 @@ public class Dude : MonoBehaviour
         if (Math.Abs(Input.GetAxis("Horizontal")) > 0.1f || Math.Abs(Input.GetAxis("Vertical")) > 0.1f)
             facing = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
-        animatorThing.SetFloat("Speed", moving.normalized.magnitude);
+        animatorThing.SetFloat("Speed", moving.magnitude);
 
         var targetYaw = Mathf.Atan2(facing.x, facing.y)*Mathf.Rad2Deg;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed*Time.deltaTime);
