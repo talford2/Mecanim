@@ -41,10 +41,9 @@ public class Dude : MonoBehaviour
         var aimYaw = Quaternion.LookRotation(toAimPosition).eulerAngles.y;
         var relativeAimYaw = aimYaw - transform.eulerAngles.y;
 
-        Debug.Log(transform.eulerAngles.y + " | " + relativeAimYaw);
+        var velocity = Vector3.ClampMagnitude(new Vector3(moving.x, 0f, moving.y), 1f)*WalkSpeed;
 
-
-        playerController.Move(Vector3.ClampMagnitude(new Vector3(moving.x, 0f, moving.y), 1f)*WalkSpeed*Time.deltaTime);
+        playerController.Move(velocity * Time.deltaTime);
 
         ChaseCamera.transform.position = transform.position + new Vector3(0, 7.5f, -7.5f);
         ChaseCamera.transform.LookAt(transform.position);
