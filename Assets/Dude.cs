@@ -32,7 +32,7 @@ public class Dude : MonoBehaviour
         var targetYaw = Mathf.Atan2(facing.x, facing.y)*Mathf.Rad2Deg;
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed*Time.deltaTime);
 
-        var aimAtPosition = GetScreenPointInWorldPlane(Input.mousePosition, 1.0f);
+        var aimAtPosition = GetScreenPointInWorldPlane(Input.mousePosition, 0f);
         var toAimPosition = aimAtPosition - transform.position;
         var aimYaw = Quaternion.LookRotation(toAimPosition).eulerAngles.y;
         var relativeAimYaw = aimYaw - transform.eulerAngles.y;
