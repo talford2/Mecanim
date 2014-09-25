@@ -70,15 +70,13 @@ public class Dude : MonoBehaviour
         var aimAtPosition = GetScreenPointInWorldPlane(Input.mousePosition, 0f);
         var toAimPosition = aimAtPosition - transform.position;
         aimYaw = Quaternion.LookRotation(toAimPosition).eulerAngles.y;
-        relativeAimYaw = aimYaw - transform.eulerAngles.y;
+        relativeAimYaw = Mathf.DeltaAngle(transform.eulerAngles.y, aimYaw);
 
         var targetYaw = Mathf.Atan2(facing.x, facing.y)*Mathf.Rad2Deg;
 
-        if (relativeAimYaw > 90 && relativeAimYaw < 270)
-        {
-            Debug.Log("Walk Backwards");
-            //targetYaw = aimYaw;
-        }
+        Debug.Log(relativeAimYaw / 90f);
+
+        animatorThing.SetFloat("Turn", relativeAimYaw/90f);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed * Time.deltaTime);
 
@@ -91,8 +89,8 @@ public class Dude : MonoBehaviour
 
     private void LateUpdate()
     {
-        //spine1.localRotation = Quaternion.AngleAxis(aimYaw, Vector3.forward);
-        spine1.rotation = Quaternion.Euler(spine1.eulerAngles.x, aimYaw+60f, spine1.eulerAngles.z);
+        //spine1.localRotation = Quaternion.AngleAxis(relativeAimYaw, transform.TransformDirection(Vector3.up));
+        //spine1.localRotation = Quaternion.Euler(spine1.localEulerAngles.x, relativeAimYaw, spine1.localEulerAngles.z);
     }
 
     private Vector3 GetScreenPointInWorldPlane(Vector3 screenPoint, float height)
