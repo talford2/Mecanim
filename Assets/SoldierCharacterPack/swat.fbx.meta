@@ -103,6 +103,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths:
     - Hips/Spine/Spine1/Spine2/RightShoulder/RightArm/RightForeArm/RightHand/RightHandIndex1
+    - Hips/Spine/Spine1
     clipAnimations: []
     isReadable: 1
   meshes:
