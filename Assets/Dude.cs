@@ -11,6 +11,9 @@ public class Dude : MonoBehaviour
     private Vector2 moving;
     private Vector2 facing;
     private float turnSpeed;
+    private float relativeAimYaw;
+
+    private Transform spine1;
     
     // Reloading
     private bool isReloading;
@@ -28,6 +31,8 @@ public class Dude : MonoBehaviour
         animatorThing = GetComponent<Animator>();
         moving = new Vector2(0, 1f);
         turnSpeed = 5f;
+
+        spine1 = transform.FindChild("Hips").FindChild("Spine").FindChild("Spine1");
     }
 
     private void Update()
@@ -64,21 +69,28 @@ public class Dude : MonoBehaviour
         var aimAtPosition = GetScreenPointInWorldPlane(Input.mousePosition, 0f);
         var toAimPosition = aimAtPosition - transform.position;
         var aimYaw = Quaternion.LookRotation(toAimPosition).eulerAngles.y;
-        var relativeAimYaw = aimYaw - transform.eulerAngles.y;
+        relativeAimYaw = aimYaw - transform.eulerAngles.y;
 
         var targetYaw = Mathf.Atan2(facing.x, facing.y)*Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed*Time.deltaTime);
 
         if (relativeAimYaw > 90 && relativeAimYaw < 270)
         {
             Debug.Log("Walk Backwards");
+            //targetYaw = aimYaw;
         }
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed * Time.deltaTime);
 
         ChaseCamera.transform.position = transform.position + new Vector3(0, 5f, -5f);
         ChaseCamera.transform.LookAt(transform.position);
 
         lastUpdatePosition = transform.position;
         lastUpdateTime = Time.deltaTime;
+    }
+
+    private void LateUpdate()
+    {
+        spine1.localRotation = Quaternion.Euler(spine1.localEulerAngles.x, relativeAimYaw, spine1.localEulerAngles.z);
     }
 
     private Vector3 GetScreenPointInWorldPlane(Vector3 screenPoint, float height)
