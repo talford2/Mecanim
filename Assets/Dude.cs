@@ -1,12 +1,10 @@
 ﻿using System;
 using UnityEngine;
-using System.Collections;
 
 public class Dude : MonoBehaviour
 {
     Animator animatorThing;
     public Camera ChaseCamera;
-    public float WalkSpeed;
     public float ReloadTime;
 
     // Movement
@@ -20,8 +18,7 @@ public class Dude : MonoBehaviour
 
     private CharacterController playerController;
 
-    // Use this for initialization
-    void Start()
+    void Awake()
     {
         playerController = GetComponent<CharacterController>();
         animatorThing = GetComponent<Animator>();
@@ -29,7 +26,6 @@ public class Dude : MonoBehaviour
         turnSpeed = 5f;
     }
 
-    // Update is called once per frame
     private void Update()
     {
         
@@ -49,7 +45,7 @@ public class Dude : MonoBehaviour
         }
         else
         {
-            moving = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+            moving = Vector2.Lerp(moving, new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")), Time.deltaTime*10f);
 
             if (Math.Abs(Input.GetAxis("Horizontal")) > 0.1f || Math.Abs(Input.GetAxis("Vertical")) > 0.1f)
                 facing = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -69,11 +65,6 @@ public class Dude : MonoBehaviour
         var toAimPosition = aimAtPosition - transform.position;
         var aimYaw = Quaternion.LookRotation(toAimPosition).eulerAngles.y;
         var relativeAimYaw = aimYaw - transform.eulerAngles.y;
-
-        var velocity = Vector3.ClampMagnitude(new Vector3(moving.x, 0f, moving.y), 1f)*WalkSpeed;
-
-        if (moving.magnitude > 0.1f)
-            playerController.Move(velocity*Time.deltaTime);
 
         ChaseCamera.transform.position = transform.position + new Vector3(0, 7.5f, -7.5f);
         ChaseCamera.transform.LookAt(transform.position);
