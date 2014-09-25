@@ -7,10 +7,16 @@ public class Dude : MonoBehaviour
     Animator animatorThing;
     public Camera ChaseCamera;
     public float WalkSpeed;
+    public float ReloadTime;
 
+    // Movement
     private Vector2 moving;
     private Vector2 facing;
     private float turnSpeed;
+    
+    // Reloading
+    private bool isReloading;
+    private float reloadCooldown;
 
     private CharacterController playerController;
 
@@ -26,13 +32,34 @@ public class Dude : MonoBehaviour
     // Update is called once per frame
     private void Update()
     {
-        moving = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        
 
-        if (Math.Abs(Input.GetAxis("Horizontal")) > 0.1f || Math.Abs(Input.GetAxis("Vertical")) > 0.1f)
-            facing = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        if (Input.GetButton("Reload"))
+        {
+            isReloading = true;
+            reloadCooldown = ReloadTime;
+        }
 
+        if (isReloading)
+        {
+            moving = Vector2.Lerp(moving, new Vector2(0, 0), Time.deltaTime*10f);
+            reloadCooldown -= Time.deltaTime;
+            if (reloadCooldown < 0)
+                isReloading = false;
+        }
+        else
+        {
+            moving = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+
+            if (Math.Abs(Input.GetAxis("Horizontal")) > 0.1f || Math.Abs(Input.GetAxis("Vertical")) > 0.1f)
+                facing = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        }
+
+        Debug.Log(isReloading);
+
+        // Animation
         animatorThing.SetBool("Firing", Input.GetButton("Fire1"));
-
+        animatorThing.SetBool("Reloading", isReloading);
         animatorThing.SetFloat("Speed", Vector3.ClampMagnitude(moving, 1f).magnitude);
 
         var targetYaw = Mathf.Atan2(facing.x, facing.y)*Mathf.Rad2Deg;
