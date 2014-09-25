@@ -94,7 +94,7 @@ ModelImporter:
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
-    optimizeGameObjects: 1
+    optimizeGameObjects: 0
     motionNodeName: 
     animationCompression: 3
     animationRotationError: .5
@@ -103,6 +103,7 @@ ModelImporter:
     animationWrapMode: 0
     extraExposedTransformPaths:
     - Hips/Spine/Spine1/Spine2/RightShoulder/RightArm/RightForeArm/RightHand/RightHandIndex1
+    - Hips/Spine/Spine1
     clipAnimations: []
     isReadable: 1
   meshes:
