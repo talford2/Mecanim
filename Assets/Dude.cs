@@ -11,6 +11,7 @@ public class Dude : MonoBehaviour
     private Vector2 moving;
     private Vector2 facing;
     private float turnSpeed;
+    private float aimYaw;
     private float relativeAimYaw;
 
     private Transform spine1;
@@ -32,7 +33,7 @@ public class Dude : MonoBehaviour
         moving = new Vector2(0, 1f);
         turnSpeed = 5f;
 
-        spine1 = transform.FindChild("Hips").FindChild("Spine").FindChild("Spine1");
+        spine1 = transform.FindChild("Hips").FindChild("Spine").FindChild("Spine1").FindChild("Spine2");
     }
 
     private void Update()
@@ -68,7 +69,7 @@ public class Dude : MonoBehaviour
 
         var aimAtPosition = GetScreenPointInWorldPlane(Input.mousePosition, 0f);
         var toAimPosition = aimAtPosition - transform.position;
-        var aimYaw = Quaternion.LookRotation(toAimPosition).eulerAngles.y;
+        aimYaw = Quaternion.LookRotation(toAimPosition).eulerAngles.y;
         relativeAimYaw = aimYaw - transform.eulerAngles.y;
 
         var targetYaw = Mathf.Atan2(facing.x, facing.y)*Mathf.Rad2Deg;
@@ -90,7 +91,8 @@ public class Dude : MonoBehaviour
 
     private void LateUpdate()
     {
-        spine1.localRotation = Quaternion.Euler(spine1.localEulerAngles.x, relativeAimYaw, spine1.localEulerAngles.z);
+        //spine1.localRotation = Quaternion.AngleAxis(aimYaw, Vector3.forward);
+        spine1.rotation = Quaternion.Euler(spine1.eulerAngles.x, aimYaw+60f, spine1.eulerAngles.z);
     }
 
     private Vector3 GetScreenPointInWorldPlane(Vector3 screenPoint, float height)
