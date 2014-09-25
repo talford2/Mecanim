@@ -32,8 +32,6 @@ public class Dude : MonoBehaviour
 
     private void Update()
     {
-        
-
         if (Input.GetButton("Reload"))
         {
             isReloading = true;
@@ -56,22 +54,27 @@ public class Dude : MonoBehaviour
         }
 
         var measuredVelocity = (transform.position - lastUpdatePosition)/Time.deltaTime;
-        Debug.Log("Speed: " + measuredVelocity.magnitude);
+        //Debug.Log("Speed: " + measuredVelocity.magnitude);
 
         // Animation
         animatorThing.SetBool("Firing", Input.GetButton("Fire1"));
         animatorThing.SetBool("Reloading", isReloading);
         animatorThing.SetFloat("Speed", Vector3.ClampMagnitude(moving, 1f).magnitude);
 
-        var targetYaw = Mathf.Atan2(facing.x, facing.y)*Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed*Time.deltaTime);
-
         var aimAtPosition = GetScreenPointInWorldPlane(Input.mousePosition, 0f);
         var toAimPosition = aimAtPosition - transform.position;
         var aimYaw = Quaternion.LookRotation(toAimPosition).eulerAngles.y;
         var relativeAimYaw = aimYaw - transform.eulerAngles.y;
 
-        ChaseCamera.transform.position = transform.position + new Vector3(0, 7.5f, -7.5f);
+        var targetYaw = Mathf.Atan2(facing.x, facing.y)*Mathf.Rad2Deg;
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed*Time.deltaTime);
+
+        if (relativeAimYaw > 90 && relativeAimYaw < 270)
+        {
+            Debug.Log("Walk Backwards");
+        }
+
+        ChaseCamera.transform.position = transform.position + new Vector3(0, 5f, -5f);
         ChaseCamera.transform.LookAt(transform.position);
 
         lastUpdatePosition = transform.position;
