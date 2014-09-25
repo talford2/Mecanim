@@ -16,6 +16,10 @@ public class Dude : MonoBehaviour
     private bool isReloading;
     private float reloadCooldown;
 
+    // Measure Speed
+    private Vector3 lastUpdatePosition;
+    private float lastUpdateTime;
+
     private CharacterController playerController;
 
     void Awake()
@@ -51,7 +55,8 @@ public class Dude : MonoBehaviour
                 facing = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         }
 
-        Debug.Log(isReloading);
+        var measuredVelocity = (transform.position - lastUpdatePosition)/Time.deltaTime;
+        Debug.Log("Speed: " + measuredVelocity.magnitude);
 
         // Animation
         animatorThing.SetBool("Firing", Input.GetButton("Fire1"));
@@ -68,6 +73,9 @@ public class Dude : MonoBehaviour
 
         ChaseCamera.transform.position = transform.position + new Vector3(0, 7.5f, -7.5f);
         ChaseCamera.transform.LookAt(transform.position);
+
+        lastUpdatePosition = transform.position;
+        lastUpdateTime = Time.deltaTime;
     }
 
     private Vector3 GetScreenPointInWorldPlane(Vector3 screenPoint, float height)
