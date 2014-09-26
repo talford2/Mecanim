@@ -64,26 +64,34 @@ public class Dude : MonoBehaviour
         var velocity = Vector3.ClampMagnitude(moving, 1f)*WalkSpeed;
 
         if (moving.magnitude > 0.1f)
-            playerController.Move(transform.TransformDirection(velocity)*Time.deltaTime);
+            playerController.Move(velocity*Time.deltaTime);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed*Time.deltaTime);
 
-        //Debug.Log(moving + " - " + (transform.rotation*moving));
-
         var rotatedMoving = transform.rotation*moving;
 
-        var forwardness = Vector3.Project(toAimPosition.normalized, moving.normalized);
+        //var forwardness = Vector3.Project(moving, toAimPosition).normalized;
 
-        Debug.Log(rotatedMoving);
+        /*
+        var rightness = Vector3.Project(new Vector3(moving.z, 0, moving.x), toAimPosition).normalized;
 
-        //var rotatedMoving = Vector3.Project(moving, transform.TransformDirection(Vector3.forward));
+        Debug.Log(Mathf.Sign(rightness.y));
+        */
 
-        //Debug.Log(rotatedMoving);
+        /*
+        var forwardness = Vector3.Project(moving, toAimPosition).normalized;
+        var rightness = Vector3.Project(new Vector3(-moving.z, 0, moving.x), toAimPosition).normalized;
+        Debug.Log(rightness);
+        */
+
+        var changeSign = 1f;
+        if (Mathf.Abs(moving.z) > 0.1f)
+            changeSign = -1f;
 
         // Animation
         animatorThing.SetFloat("Speed", moving.magnitude);
-        animatorThing.SetFloat("ForwardBackward", moving.z);
-        animatorThing.SetFloat("LeftRight", moving.x);
+        animatorThing.SetFloat("ForwardBackward", rotatedMoving.y);
+        animatorThing.SetFloat("LeftRight", rotatedMoving.x * changeSign);
 
         ChaseCamera.transform.position = transform.position + new Vector3(0, 5f, -5f);
         ChaseCamera.transform.LookAt(transform.position);
