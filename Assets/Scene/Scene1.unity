@@ -980,6 +980,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ChaseCamera: {fileID: 1013634154}
+  WalkSpeed: 4.5
   ReloadTime: 2.0999999
 --- !u!143 &1031958450
 CharacterController:
