@@ -64,7 +64,7 @@ public class Dude : MonoBehaviour
         var velocity = Vector3.ClampMagnitude(moving, 1f)*WalkSpeed;
 
         if (moving.magnitude > 0.1f)
-            playerController.Move(velocity*Time.deltaTime);
+            playerController.Move(transform.TransformDirection(velocity)*Time.deltaTime);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed*Time.deltaTime);
 
@@ -74,16 +74,16 @@ public class Dude : MonoBehaviour
 
         var forwardness = Vector3.Project(toAimPosition.normalized, moving.normalized);
 
-        Debug.Log(forwardness);
+        Debug.Log(rotatedMoving);
 
         //var rotatedMoving = Vector3.Project(moving, transform.TransformDirection(Vector3.forward));
 
         //Debug.Log(rotatedMoving);
 
         // Animation
-        animatorThing.SetFloat("Moving", moving.magnitude);
-        animatorThing.SetFloat("ForwardBackward", forwardness.z);
-        animatorThing.SetFloat("LeftRight", forwardness.x);
+        animatorThing.SetFloat("Speed", moving.magnitude);
+        animatorThing.SetFloat("ForwardBackward", moving.z);
+        animatorThing.SetFloat("LeftRight", moving.x);
 
         ChaseCamera.transform.position = transform.position + new Vector3(0, 5f, -5f);
         ChaseCamera.transform.LookAt(transform.position);
