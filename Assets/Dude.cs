@@ -64,14 +64,15 @@ public class Dude : MonoBehaviour
         // Animation
         animatorThing.SetBool("Firing", Input.GetButton("Fire1"));
         animatorThing.SetBool("Reloading", isReloading);
-        animatorThing.SetFloat("Speed", Vector3.ClampMagnitude(moving, 1f).magnitude);
+        animatorThing.SetFloat("ForwardBackward", moving.y);
+        animatorThing.SetFloat("LeftRight", moving.x);
 
         var aimAtPosition = GetScreenPointInWorldPlane(Input.mousePosition, 0f);
         var toAimPosition = aimAtPosition - transform.position;
         aimYaw = Quaternion.LookRotation(toAimPosition).eulerAngles.y;
         relativeAimYaw = Mathf.Lerp(relativeAimYaw, Mathf.DeltaAngle(transform.eulerAngles.y, aimYaw), Time.deltaTime*turnSpeed);
 
-        var targetYaw = aimYaw;//Mathf.Atan2(facing.x, facing.y)*Mathf.Rad2Deg;
+        var targetYaw = aimYaw;
 
         var velocity = Vector3.ClampMagnitude(new Vector3(moving.x, 0f, moving.y), 1f) * WalkSpeed;
 
