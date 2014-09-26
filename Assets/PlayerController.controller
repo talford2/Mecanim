@@ -68,7 +68,7 @@ AnimatorController:
     m_BlendingMode: 1
     m_SyncedLayerIndex: -1
     m_StateMachineMotionSetIndex: 0
-    m_DefaultWeight: 1
+    m_DefaultWeight: 0
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
@@ -566,7 +566,7 @@ State:
   m_Speed: 1
   m_CycleOffset: 0
   m_Motions:
-  - {fileID: 7400002, guid: f1a1175069a76bd47a4b87723930b382, type: 3}
+  - {fileID: 7400002, guid: a9942b60a3446f24b856998fadc4a811, type: 3}
   m_ParentStateMachine: {fileID: 110700000}
   m_Position: {x: 312, y: 12, z: 0}
   m_IKOnFeet: 0
