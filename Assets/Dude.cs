@@ -66,8 +66,12 @@ public class Dude : MonoBehaviour
         // Animation
         animatorThing.SetBool("Firing", Input.GetButton("Fire1"));
         animatorThing.SetBool("Reloading", isReloading);
+
+        animatorThing.SetFloat("Moving", moving.magnitude);
         animatorThing.SetFloat("ForwardBackward", moving.y);
         animatorThing.SetFloat("LeftRight", moving.x);
+
+        Debug.Log(moving);
 
         if (moving.magnitude > 0.1f)
             playerController.Move(velocity*Time.deltaTime);
