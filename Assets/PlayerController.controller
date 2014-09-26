@@ -26,13 +26,13 @@ AnimatorController:
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: Vertical
+  - m_Name: ForwardBackward
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 0
     m_Controller: {fileID: 9100000}
-  - m_Name: Horizontal
+  - m_Name: LeftRight
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -215,7 +215,7 @@ Transition:
   m_TransitionOffset: 0
   m_Conditions:
   - m_ConditionMode: 3
-    m_ConditionEvent: Vertical
+    m_ConditionEvent: ForwardBackward
     m_EventTreshold: .100000001
     m_ExitTime: .925000012
   m_Atomic: 1
@@ -255,7 +255,7 @@ Transition:
   m_TransitionOffset: 0
   m_Conditions:
   - m_ConditionMode: 4
-    m_ConditionEvent: Vertical
+    m_ConditionEvent: ForwardBackward
     m_EventTreshold: -.100000001
     m_ExitTime: .925000012
   m_Atomic: 1
@@ -315,7 +315,7 @@ Transition:
   m_TransitionOffset: 0
   m_Conditions:
   - m_ConditionMode: 3
-    m_ConditionEvent: Vertical
+    m_ConditionEvent: ForwardBackward
     m_EventTreshold: -.100000001
     m_ExitTime: .785715222
   m_Atomic: 1
@@ -335,7 +335,7 @@ Transition:
   m_TransitionOffset: 0
   m_Conditions:
   - m_ConditionMode: 4
-    m_ConditionEvent: Horizontal
+    m_ConditionEvent: LeftRight
     m_EventTreshold: .100000001
     m_ExitTime: .666667521
   m_Atomic: 1
@@ -355,7 +355,7 @@ Transition:
   m_TransitionOffset: 0
   m_Conditions:
   - m_ConditionMode: 4
-    m_ConditionEvent: Horizontal
+    m_ConditionEvent: LeftRight
     m_EventTreshold: -.100000001
     m_ExitTime: .899999976
   m_Atomic: 1
@@ -415,7 +415,7 @@ Transition:
   m_TransitionOffset: 0
   m_Conditions:
   - m_ConditionMode: 4
-    m_ConditionEvent: Vertical
+    m_ConditionEvent: ForwardBackward
     m_EventTreshold: .100000001
     m_ExitTime: .75
   m_Atomic: 1
@@ -455,7 +455,7 @@ Transition:
   m_TransitionOffset: 0
   m_Conditions:
   - m_ConditionMode: 3
-    m_ConditionEvent: Horizontal
+    m_ConditionEvent: LeftRight
     m_EventTreshold: -.100000001
     m_ExitTime: .673913717
   m_Atomic: 1
@@ -475,7 +475,7 @@ Transition:
   m_TransitionOffset: 0
   m_Conditions:
   - m_ConditionMode: 3
-    m_ConditionEvent: Horizontal
+    m_ConditionEvent: LeftRight
     m_EventTreshold: .100000001
     m_ExitTime: .899999976
   m_Atomic: 1
@@ -814,14 +814,6 @@ StateMachine:
   m_ChildStateMachinePosition: []
   m_OrderedTransitions:
     data:
-      first: {fileID: 110215694}
-      second:
-      - {fileID: 110153376}
-    data:
-      first: {fileID: 110216124}
-      second:
-      - {fileID: 110190243}
-    data:
       first: {fileID: 110200000}
       second:
       - {fileID: 110100000}
@@ -836,6 +828,14 @@ StateMachine:
       first: {fileID: 110233538}
       second:
       - {fileID: 110141751}
+    data:
+      first: {fileID: 110216124}
+      second:
+      - {fileID: 110190243}
+    data:
+      first: {fileID: 110215694}
+      second:
+      - {fileID: 110153376}
   m_MotionSetCount: 1
   m_AnyStatePosition: {x: -204, y: 12, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
