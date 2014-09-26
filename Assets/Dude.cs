@@ -9,7 +9,7 @@ public class Dude : MonoBehaviour
     public float ReloadTime;
 
     // Movement
-    private Vector2 moving;
+    private Vector3 moving;
     private Vector2 facing;
     private float acceleration;
     private float turnSpeed;
@@ -48,7 +48,7 @@ public class Dude : MonoBehaviour
         }
         else
         {
-            moving = Vector2.Lerp(moving, new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")), Time.deltaTime*acceleration);
+            moving = Vector3.Lerp(moving, new Vector3(Input.GetAxis("Horizontal"),0f, Input.GetAxis("Vertical")), Time.deltaTime*acceleration);
         }
 
         if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("Vertical")) > 0.1f)
@@ -61,18 +61,21 @@ public class Dude : MonoBehaviour
 
         var targetYaw = aimYaw;
 
-        var velocity = Vector3.ClampMagnitude(new Vector3(moving.x, 0f, moving.y), 1f) * WalkSpeed;
-
-        // Animation
-        animatorThing.SetBool("Firing", Input.GetButton("Fire1"));
-        animatorThing.SetBool("Reloading", isReloading);
-        animatorThing.SetFloat("ForwardBackward", moving.y);
-        animatorThing.SetFloat("LeftRight", moving.x);
+        var velocity = Vector3.ClampMagnitude(moving, 1f) * WalkSpeed;
 
         if (moving.magnitude > 0.1f)
             playerController.Move(velocity*Time.deltaTime);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed*Time.deltaTime);
+
+        Debug.Log(moving + " - " + (transform.rotation*moving));
+
+        var rotatedMoving = transform.rotation*moving;
+
+        // Animation
+        animatorThing.SetFloat("Moving", moving.magnitude);
+        animatorThing.SetFloat("ForwardBackward", rotatedMoving.z);
+        animatorThing.SetFloat("LeftRight", rotatedMoving.x);
 
         ChaseCamera.transform.position = transform.position + new Vector3(0, 5f, -5f);
         ChaseCamera.transform.LookAt(transform.position);
