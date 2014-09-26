@@ -70,7 +70,7 @@ public class Dude : MonoBehaviour
 
         var rotatedMoving = transform.rotation*moving;
 
-        //var forwardness = Vector3.Project(moving, toAimPosition).normalized;
+        var forwardness = Vector3.Project(moving, toAimPosition).normalized;
 
         /*
         var rightness = Vector3.Project(new Vector3(moving.z, 0, moving.x), toAimPosition).normalized;
@@ -88,8 +88,10 @@ public class Dude : MonoBehaviour
         if (Mathf.Abs(moving.z) > 0.1f)
             changeSign = -1f;
 
+        Debug.Log(moving.magnitude * Mathf.Sign(forwardness.y));
+
         // Animation
-        animatorThing.SetFloat("Speed", moving.magnitude);
+        animatorThing.SetFloat("Speed", moving.magnitude*Mathf.Sign(forwardness.y));
         animatorThing.SetFloat("ForwardBackward", rotatedMoving.y);
         animatorThing.SetFloat("LeftRight", rotatedMoving.x * changeSign);
 
