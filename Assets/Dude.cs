@@ -5,6 +5,7 @@ public class Dude : MonoBehaviour
 {
     private Animator animatorThing;
     public Camera ChaseCamera;
+    public float WalkSpeed;
     public float ReloadTime;
 
     // Movement
@@ -70,17 +71,17 @@ public class Dude : MonoBehaviour
         aimYaw = Quaternion.LookRotation(toAimPosition).eulerAngles.y;
         relativeAimYaw = Mathf.Lerp(relativeAimYaw, Mathf.DeltaAngle(transform.eulerAngles.y, aimYaw), Time.deltaTime*turnSpeed);
 
-        var targetYaw = Mathf.Atan2(facing.x, facing.y)*Mathf.Rad2Deg;
+        var targetYaw = aimYaw;//Mathf.Atan2(facing.x, facing.y)*Mathf.Rad2Deg;
 
-        animatorThing.SetFloat("Turn", relativeAimYaw/90f);
+        var velocity = Vector3.ClampMagnitude(new Vector3(moving.x, 0f, moving.y), 1f) * WalkSpeed;
+
+        if (moving.magnitude > 0.1f)
+            playerController.Move(velocity*Time.deltaTime);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed*Time.deltaTime);
 
         ChaseCamera.transform.position = transform.position + new Vector3(0, 5f, -5f);
         ChaseCamera.transform.LookAt(transform.position);
-
-        lastUpdatePosition = transform.position;
-        lastUpdateTime = Time.deltaTime;
     }
 
     private Vector3 GetScreenPointInWorldPlane(Vector3 screenPoint, float height)
