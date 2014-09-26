@@ -59,7 +59,7 @@ AnimatorController:
     m_Name: Torso
     m_StateMachine: {fileID: 110700448}
     m_Mask: {fileID: 101100000, guid: b7c14172ea9f55245be5e637e2a75544, type: 2}
-    m_BlendingMode: 0
+    m_BlendingMode: 1
     m_SyncedLayerIndex: -1
     m_StateMachineMotionSetIndex: 0
     m_DefaultWeight: 1
@@ -73,7 +73,7 @@ AnimatorController:
     m_BlendingMode: 1
     m_SyncedLayerIndex: -1
     m_StateMachineMotionSetIndex: 0
-    m_DefaultWeight: 0
+    m_DefaultWeight: 1
     m_IKPass: 0
     m_SyncedLayerAffectsTiming: 0
     m_Controller: {fileID: 9100000}
@@ -449,6 +449,10 @@ StateMachine:
       first: {fileID: 0}
       second: []
     data:
+      first: {fileID: 110239859}
+      second:
+      - {fileID: 110180907}
+    data:
       first: {fileID: 110243249}
       second:
       - {fileID: 110140070}
@@ -457,10 +461,6 @@ StateMachine:
       first: {fileID: 110251848}
       second:
       - {fileID: 110156271}
-    data:
-      first: {fileID: 110239859}
-      second:
-      - {fileID: 110180907}
   m_MotionSetCount: 1
   m_AnyStatePosition: {x: 50, y: 20, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
@@ -477,12 +477,6 @@ StateMachine:
   m_ChildStateMachine: []
   m_ChildStateMachinePosition: []
   m_OrderedTransitions:
-    data:
-      first: {fileID: 0}
-      second: []
-    data:
-      first: {fileID: 0}
-      second: []
     data:
       first: {fileID: 0}
       second: []
@@ -510,13 +504,13 @@ StateMachine:
       - {fileID: 110100000}
       - {fileID: 110123120}
     data:
-      first: {fileID: 110289631}
-      second:
-      - {fileID: 110170040}
-    data:
       first: {fileID: 110233538}
       second:
       - {fileID: 110141751}
+    data:
+      first: {fileID: 110289631}
+      second:
+      - {fileID: 110170040}
   m_MotionSetCount: 1
   m_AnyStatePosition: {x: 50, y: 20, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
