@@ -20,10 +20,6 @@ public class Dude : MonoBehaviour
     private bool isReloading;
     private float reloadCooldown;
 
-    // Measure Speed
-    private Vector3 lastUpdatePosition;
-    private float lastUpdateTime;
-
     private CharacterController playerController;
 
     private void Awake()
@@ -53,19 +49,10 @@ public class Dude : MonoBehaviour
         else
         {
             moving = Vector2.Lerp(moving, new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")), Time.deltaTime*acceleration);
-
-            if (Math.Abs(Input.GetAxis("Horizontal")) > 0.1f || Math.Abs(Input.GetAxis("Vertical")) > 0.1f)
-                facing = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
         }
 
-        var measuredVelocity = (transform.position - lastUpdatePosition)/Time.deltaTime;
-        //Debug.Log("Speed: " + measuredVelocity.magnitude);
-
-        // Animation
-        animatorThing.SetBool("Firing", Input.GetButton("Fire1"));
-        animatorThing.SetBool("Reloading", isReloading);
-        animatorThing.SetFloat("ForwardBackward", moving.y);
-        animatorThing.SetFloat("LeftRight", moving.x);
+        if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("Vertical")) > 0.1f)
+            facing = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
         var aimAtPosition = GetScreenPointInWorldPlane(Input.mousePosition, 0f);
         var toAimPosition = aimAtPosition - transform.position;
@@ -75,6 +62,12 @@ public class Dude : MonoBehaviour
         var targetYaw = aimYaw;
 
         var velocity = Vector3.ClampMagnitude(new Vector3(moving.x, 0f, moving.y), 1f) * WalkSpeed;
+
+        // Animation
+        animatorThing.SetBool("Firing", Input.GetButton("Fire1"));
+        animatorThing.SetBool("Reloading", isReloading);
+        animatorThing.SetFloat("ForwardBackward", moving.y);
+        animatorThing.SetFloat("LeftRight", moving.x);
 
         if (moving.magnitude > 0.1f)
             playerController.Move(velocity*Time.deltaTime);
