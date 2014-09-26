@@ -3,19 +3,18 @@ using UnityEngine;
 
 public class Dude : MonoBehaviour
 {
-    Animator animatorThing;
+    private Animator animatorThing;
     public Camera ChaseCamera;
     public float ReloadTime;
 
     // Movement
     private Vector2 moving;
     private Vector2 facing;
+    private float acceleration;
     private float turnSpeed;
     private float aimYaw;
     private float relativeAimYaw;
 
-    private Transform spine1;
-    
     // Reloading
     private bool isReloading;
     private float reloadCooldown;
@@ -26,14 +25,13 @@ public class Dude : MonoBehaviour
 
     private CharacterController playerController;
 
-    void Awake()
+    private void Awake()
     {
         playerController = GetComponent<CharacterController>();
         animatorThing = GetComponent<Animator>();
         moving = new Vector2(0, 1f);
+        acceleration = 10f;
         turnSpeed = 5f;
-
-        spine1 = transform.FindChild("Hips").FindChild("Spine").FindChild("Spine1").FindChild("Spine2");
     }
 
     private void Update()
@@ -53,7 +51,7 @@ public class Dude : MonoBehaviour
         }
         else
         {
-            moving = Vector2.Lerp(moving, new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")), Time.deltaTime*10f);
+            moving = Vector2.Lerp(moving, new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical")), Time.deltaTime*acceleration);
 
             if (Math.Abs(Input.GetAxis("Horizontal")) > 0.1f || Math.Abs(Input.GetAxis("Vertical")) > 0.1f)
                 facing = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
@@ -70,27 +68,19 @@ public class Dude : MonoBehaviour
         var aimAtPosition = GetScreenPointInWorldPlane(Input.mousePosition, 0f);
         var toAimPosition = aimAtPosition - transform.position;
         aimYaw = Quaternion.LookRotation(toAimPosition).eulerAngles.y;
-        relativeAimYaw = Mathf.DeltaAngle(transform.eulerAngles.y, aimYaw);
+        relativeAimYaw = Mathf.Lerp(relativeAimYaw, Mathf.DeltaAngle(transform.eulerAngles.y, aimYaw), Time.deltaTime*turnSpeed);
 
         var targetYaw = Mathf.Atan2(facing.x, facing.y)*Mathf.Rad2Deg;
 
-        Debug.Log(relativeAimYaw / 90f);
-
         animatorThing.SetFloat("Turn", relativeAimYaw/90f);
 
-        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed*Time.deltaTime);
 
         ChaseCamera.transform.position = transform.position + new Vector3(0, 5f, -5f);
         ChaseCamera.transform.LookAt(transform.position);
 
         lastUpdatePosition = transform.position;
         lastUpdateTime = Time.deltaTime;
-    }
-
-    private void LateUpdate()
-    {
-        //spine1.localRotation = Quaternion.AngleAxis(relativeAimYaw, transform.TransformDirection(Vector3.up));
-        //spine1.localRotation = Quaternion.Euler(spine1.localEulerAngles.x, relativeAimYaw, spine1.localEulerAngles.z);
     }
 
     private Vector3 GetScreenPointInWorldPlane(Vector3 screenPoint, float height)
