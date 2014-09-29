@@ -2,7 +2,7 @@
 
 public class Dude : MonoBehaviour
 {
-    public Camera ChaseCamera;
+    // Public Properties
     public float RunSpeed;
     public float WalkSpeed;
     public float ReloadTime;
@@ -12,21 +12,23 @@ public class Dude : MonoBehaviour
     private float acceleration;
     private Vector3 velocity;
     private float turnSpeed;
+    private CharacterController playerController;
+
+    // Aiming
     private float aimYaw;
     private float relativeAimYaw;
-    private CharacterController playerController;
 
     // Reloading
     private bool isReloading;
     private float reloadCooldown;
 
     // Animation
-    private Animator animatorThing;
+    private Animator playerAnimator;
 
     private void Awake()
     {
         playerController = GetComponent<CharacterController>();
-        animatorThing = GetComponent<Animator>();
+        playerAnimator = GetComponent<Animator>();
         moving = new Vector2(0, 1f);
         acceleration = 10f;
         turnSpeed = 5f;
@@ -78,12 +80,9 @@ public class Dude : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed*Time.deltaTime);
 
         // Animation
-        animatorThing.SetFloat("Speed", moving.magnitude);
-        animatorThing.SetFloat("ForwardBackward", forwardBackward);
-        animatorThing.SetFloat("LeftRight", leftRight);
-
-        ChaseCamera.transform.position = transform.position + new Vector3(0, 5f, -5f);
-        ChaseCamera.transform.LookAt(transform.position);
+        playerAnimator.SetFloat("Speed", moving.magnitude);
+        playerAnimator.SetFloat("ForwardBackward", forwardBackward);
+        playerAnimator.SetFloat("LeftRight", leftRight);
     }
 
     private Vector3 GetScreenPointInWorldPlane(Vector3 screenPoint, float height)

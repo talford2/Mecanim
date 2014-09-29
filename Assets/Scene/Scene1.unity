@@ -865,6 +865,7 @@ GameObject:
   - 92: {fileID: 1013634153}
   - 124: {fileID: 1013634152}
   - 81: {fileID: 1013634151}
+  - 114: {fileID: 1013634156}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -937,6 +938,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
+--- !u!114 &1013634156
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1013634150}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 73716366c1a1cb0469037178f845522b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ChaseGameObject: {fileID: 1031958446}
 --- !u!1 &1031958446
 GameObject:
   m_ObjectHideFlags: 0
@@ -995,7 +1008,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 593175d9ad1c06a4f9942c0456ffdd1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ChaseCamera: {fileID: 1013634154}
   RunSpeed: 4.5
   WalkSpeed: 1.5
   ReloadTime: 2.0999999
