@@ -1,27 +1,27 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Dude : MonoBehaviour
 {
-    private Animator animatorThing;
     public Camera ChaseCamera;
+    public float RunSpeed;
     public float WalkSpeed;
     public float ReloadTime;
 
     // Movement
     private Vector3 moving;
-    private Vector2 facing;
     private float acceleration;
     private Vector3 velocity;
     private float turnSpeed;
     private float aimYaw;
     private float relativeAimYaw;
+    private CharacterController playerController;
 
     // Reloading
     private bool isReloading;
     private float reloadCooldown;
 
-    private CharacterController playerController;
+    // Animation
+    private Animator animatorThing;
 
     private void Awake()
     {
@@ -52,25 +52,24 @@ public class Dude : MonoBehaviour
             moving = Vector3.Lerp(moving, new Vector3(Input.GetAxis("Horizontal"), 0f, Input.GetAxis("Vertical")), Time.deltaTime*acceleration);
         }
 
-        if (Mathf.Abs(Input.GetAxis("Horizontal")) > 0.1f || Mathf.Abs(Input.GetAxis("Vertical")) > 0.1f)
-            facing = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-
         var aimAtPosition = GetScreenPointInWorldPlane(Input.mousePosition, 0f);
         var toAimPosition = aimAtPosition - transform.position;
         aimYaw = Quaternion.LookRotation(toAimPosition).eulerAngles.y;
-        //relativeAimYaw = Mathf.Lerp(relativeAimYaw, Mathf.DeltaAngle(transform.eulerAngles.y, aimYaw), Time.deltaTime*turnSpeed);
 
         var relativeToWalkYaw = Mathf.DeltaAngle(Mathf.Atan2(moving.x, moving.z) * Mathf.Rad2Deg, aimYaw) * Mathf.Deg2Rad;
+        var forwardBackward = Mathf.Cos(relativeToWalkYaw);
+        var leftRight = -Mathf.Sin(relativeToWalkYaw);
         var targetYaw = aimYaw;
 
-
-        if (Mathf.Cos(relativeToWalkYaw) > 0f)
+        if (forwardBackward > 0f)
         {
-            velocity = Vector3.ClampMagnitude(moving, 1f) * WalkSpeed;
+            // Run Forward
+            velocity = Vector3.Lerp(velocity, Vector3.ClampMagnitude(moving, 1f)*RunSpeed, Time.deltaTime*acceleration);
         }
         else
         {
-            velocity = Vector3.Lerp(velocity, Vector3.ClampMagnitude(moving, 1f) * WalkSpeed / 2f, Time.deltaTime * 2f);
+            // Walk Backward
+            velocity = Vector3.Lerp(velocity, Vector3.ClampMagnitude(moving, 1f)*WalkSpeed, Time.deltaTime*acceleration);
         }
 
         if (moving.magnitude > 0.1f)
@@ -80,8 +79,8 @@ public class Dude : MonoBehaviour
 
         // Animation
         animatorThing.SetFloat("Speed", moving.magnitude);
-        animatorThing.SetFloat("ForwardBackward", Mathf.Cos(relativeToWalkYaw));
-        animatorThing.SetFloat("LeftRight", -Mathf.Sin(relativeToWalkYaw));
+        animatorThing.SetFloat("ForwardBackward", forwardBackward);
+        animatorThing.SetFloat("LeftRight", leftRight);
 
         ChaseCamera.transform.position = transform.position + new Vector3(0, 5f, -5f);
         ChaseCamera.transform.LookAt(transform.position);
