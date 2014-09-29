@@ -69,31 +69,16 @@ public class Dude : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed*Time.deltaTime);
 
         var rotatedMoving = transform.rotation*moving;
-
-        //var forwardness = Vector3.Project(moving, toAimPosition).normalized;
-
         /*
-        var rightness = Vector3.Project(new Vector3(moving.z, 0, moving.x), toAimPosition).normalized;
-
-        Debug.Log(Mathf.Sign(rightness.y));
-        */
-
-        /*
-        var forwardness = Vector3.Project(moving, toAimPosition).normalized;
-        var rightness = Vector3.Project(new Vector3(-moving.z, 0, moving.x), toAimPosition).normalized;
-        Debug.Log(rightness);
-        */
-
         var changeSign = 1f;
         if (Mathf.Abs(moving.z) > 0.1f)
             changeSign = -1f;
-
-        Debug.Log(rotatedMoving.z);
+        */
 
         // Animation
         animatorThing.SetFloat("Speed", moving.magnitude);
-        animatorThing.SetFloat("ForwardBackward", rotatedMoving.z * -changeSign);
-        animatorThing.SetFloat("LeftRight", -rotatedMoving.x);
+        animatorThing.SetFloat("ForwardBackward", rotatedMoving.z);
+        animatorThing.SetFloat("LeftRight", rotatedMoving.x);
 
         ChaseCamera.transform.position = transform.position + new Vector3(0, 5f, -5f);
         ChaseCamera.transform.LookAt(transform.position);
