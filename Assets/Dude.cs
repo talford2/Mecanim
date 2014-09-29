@@ -12,6 +12,7 @@ public class Dude : MonoBehaviour
     private Vector3 moving;
     private Vector2 facing;
     private float acceleration;
+    private Vector3 velocity;
     private float turnSpeed;
     private float aimYaw;
     private float relativeAimYaw;
@@ -57,34 +58,30 @@ public class Dude : MonoBehaviour
         var aimAtPosition = GetScreenPointInWorldPlane(Input.mousePosition, 0f);
         var toAimPosition = aimAtPosition - transform.position;
         aimYaw = Quaternion.LookRotation(toAimPosition).eulerAngles.y;
-        relativeAimYaw = Mathf.Lerp(relativeAimYaw, Mathf.DeltaAngle(transform.eulerAngles.y, aimYaw), Time.deltaTime*turnSpeed);
+        //relativeAimYaw = Mathf.Lerp(relativeAimYaw, Mathf.DeltaAngle(transform.eulerAngles.y, aimYaw), Time.deltaTime*turnSpeed);
 
+        var relativeToWalkYaw = Mathf.DeltaAngle(Mathf.Atan2(moving.x, moving.z) * Mathf.Rad2Deg, aimYaw) * Mathf.Deg2Rad;
         var targetYaw = aimYaw;
 
-        var velocity = Vector3.ClampMagnitude(moving, 1f)*WalkSpeed;
+
+        if (Mathf.Cos(relativeToWalkYaw) > 0f)
+        {
+            velocity = Vector3.ClampMagnitude(moving, 1f) * WalkSpeed;
+        }
+        else
+        {
+            velocity = Vector3.Lerp(velocity, Vector3.ClampMagnitude(moving, 1f) * WalkSpeed / 2f, Time.deltaTime * 2f);
+        }
 
         if (moving.magnitude > 0.1f)
             playerController.Move(velocity*Time.deltaTime);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.Euler(transform.eulerAngles.x, targetYaw, transform.eulerAngles.z), turnSpeed*Time.deltaTime);
 
-        var rotatedMoving = transform.rotation*moving;
-
-        var changeSignX = 1f;
-        if (Mathf.Abs(moving.z) > 0.1f)
-            changeSignX = -1f;
-
-        var changeSignZ = 1f;
-        if (Mathf.Abs(moving.x) > 0.1f)
-            changeSignZ = -1f;
-
-
-        Debug.Log(rotatedMoving);
-
         // Animation
         animatorThing.SetFloat("Speed", moving.magnitude);
-        animatorThing.SetFloat("ForwardBackward", rotatedMoving.z*changeSignZ);
-        animatorThing.SetFloat("LeftRight", rotatedMoving.x*changeSignX);
+        animatorThing.SetFloat("ForwardBackward", Mathf.Cos(relativeToWalkYaw));
+        animatorThing.SetFloat("LeftRight", -Mathf.Sin(relativeToWalkYaw));
 
         ChaseCamera.transform.position = transform.position + new Vector3(0, 5f, -5f);
         ChaseCamera.transform.LookAt(transform.position);
